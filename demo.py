@@ -19,28 +19,41 @@ face_detector = BlazeFace(back_model=back_detector).to(gpu)
 face_detector.load_weights("blazeface.pth")
 face_detector.load_anchors("anchors_face.npy")
 
+name = "Unknown"
+
 known_face_encodings = []
 known_face_names = []
 can_record = False
 time_during_unknown = 0
 unknown_time_threshold = 5
 
-cv2.namedWindow("Facial Recognition")
+cv2.namedWindow("test")
 capture = cv2.VideoCapture(0)
 mirror_img = True
 
+# load previously stored faces
+image_files = [os.path.join("faces", f) for f in os.listdir("faces")]
+
+for img in image_files:  
+    print(img)
+    cv2.imshow("prev images", cv2.imread(img))
+    cv2.waitKey(500)
+    
+    new_enc = DeepFace.represent(cv2.imread(img), model_name="Facenet", enforce_detection=False)
+    if len(new_enc) > 0:
+        known_face_encodings.append(np.array(new_enc[0]["embedding"]))
+    
+    img = os.path.basename(img).split("_")[0]
+    known_face_names.append(img)
+    print(img)
+    
 if capture.isOpened():
     hasFrame, frame = capture.read()
 else:
     hasFrame = False
 
 frame_count = 0
-name = "Unknown"
 recording = False
-
-#????
-video_writer = None
-record_start_time = None
 
 while hasFrame:
     frame_count += 1
@@ -55,7 +68,7 @@ while hasFrame:
     face_detections = denormalize_detections(normalized_face_detections, scale, pad)
     if not recording:
         draw_detections(frame, face_detections)
-  
+
     for idx, det in enumerate(face_detections):
         y1, x1, y2, x2 = map(int, det[:4])
         h, w, _ = frame.shape
@@ -71,7 +84,7 @@ while hasFrame:
         face_crop_rgb = cv2.cvtColor(face_crop_bgr, cv2.COLOR_BGR2RGB)
 
         encodings = DeepFace.represent(face_crop_rgb, model_name="Facenet", enforce_detection=False)
-        
+                
         if time_during_unknown  >= unknown_time_threshold:
             can_record = True
         
@@ -102,17 +115,17 @@ while hasFrame:
                 time_during_unknown += 0.1
                 name = "Unknown"
         else:
-            time_during_unknown = 5
+            time_during_unknown += 0.1
 
         if name == "Unknown" and not recording and can_record:
-            name = input("Enter Name: ")
+            new_name = input("Enter Name: ")
             record_start_time = time.time()
             recording = True
 
         if recording:
             elapsed_time = time.time() - record_start_time
             cropped_face = frame[y1:y2, x1:x2]
-            filename = f"faces/{name}_{time.strftime('%Y%m%d_%H%M%S')}.jpg"
+            filename = f"faces/{new_name}_{time.strftime('%Y%m%d_%H%M%S')}.jpg"
             print(f"Recording new face at: {filename}")
             
             success = cv2.imwrite(filename, cropped_face)
@@ -125,7 +138,7 @@ while hasFrame:
             new_enc = DeepFace.represent(cropped_face, model_name="Facenet", enforce_detection=False)
             if len(new_enc) > 0:
                 known_face_encodings.append(np.array(new_enc[0]["embedding"]))
-                known_face_names.append(name)
+                known_face_names.append(new_name)
                 time_during_unknown = 0
             else:
                 print(f"Failed to load image: {filename}")
@@ -136,6 +149,8 @@ while hasFrame:
                 recording = False
                 can_record = False
                 time_when_video_over = time.time()
+                name = new_name
+                
                 
         # Draw bounding box and label
         color = (0, 255, 255)
