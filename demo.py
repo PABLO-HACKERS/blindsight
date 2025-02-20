@@ -8,6 +8,10 @@ from blazeface import BlazeFace
 from blazebase import resize_pad, denormalize_detections
 from visualization import draw_detections
 
+import sounddevice as sd
+import whisper
+import scipy.io.wavfile as wav
+
 os.makedirs('faces', exist_ok=True)
 
 # Setup Torch / BlazeFace
@@ -25,7 +29,7 @@ known_face_encodings = []
 known_face_names = []
 can_record = False
 time_during_unknown = 0
-unknown_time_threshold = 5
+unknown_time_threshold = 500
 
 cv2.namedWindow("test")
 capture = cv2.VideoCapture(0)
@@ -34,33 +38,55 @@ mirror_img = True
 # load previously stored faces
 image_files = [os.path.join("faces", f) for f in os.listdir("faces")]
 
-for img in image_files:  
-    print(img)
-    cv2.imshow("prev images", cv2.imread(img))
-    cv2.waitKey(500)
-    
+for img in image_files:      
     new_enc = DeepFace.represent(cv2.imread(img), model_name="Facenet", enforce_detection=False)
     if len(new_enc) > 0:
         known_face_encodings.append(np.array(new_enc[0]["embedding"]))
     
     img = os.path.basename(img).split("_")[0]
     known_face_names.append(img)
-    print(img)
-    
+
 if capture.isOpened():
     hasFrame, frame = capture.read()
 else:
     hasFrame = False
 
+model = whisper.load_model("small.en")
+
+sample_rate = 16000  # Whisper expects 16kHz audio
+chunk_duration = 5  # Capture 5 seconds at a time
+
 frame_count = 0
 recording = False
 
+detect_faces = False
+detect_speech = True
+
 while hasFrame:
+    
+    if detect_speech:
+        #whisper
+        audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
+        sd.wait()
+
+        wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
+        
+        # Transcribe the audio chunk
+        result = model.transcribe("temp_audio.wav")
+        print("Transcription:", result["text"])
+        
+        if "who are you" in result["text"].lower():
+            detect_faces = True
+            detect_speech = False
+    
     frame_count += 1
+    
     if mirror_img:
         frame = np.ascontiguousarray(frame[:, ::-1, ::-1])
     else:
         frame = np.ascontiguousarray(frame[:, :, ::-1])
+    
+    
     
     img1, img2, scale, pad = resize_pad(frame)
 
@@ -82,13 +108,15 @@ while hasFrame:
 
         face_crop_bgr = frame[y1:y2, x1:x2]
         face_crop_rgb = cv2.cvtColor(face_crop_bgr, cv2.COLOR_BGR2RGB)
-
-        encodings = DeepFace.represent(face_crop_rgb, model_name="Facenet", enforce_detection=False)
+        
+        encodings = []
+        if frame_count % 100 == 0 and detect_faces:
+            encodings = DeepFace.represent(face_crop_rgb, model_name="Facenet", enforce_detection=False)
                 
         if time_during_unknown  >= unknown_time_threshold:
             can_record = True
         
-        if frame_count % 20 == 0 and len(known_face_encodings) > 0:
+        if len(known_face_encodings) > 0:
             if len(encodings) > 0:
                 new_enc = np.array(encodings[0]["embedding"])
 
@@ -105,7 +133,6 @@ while hasFrame:
                     time_during_unknown = 0
                     recording = False
 
-                    # print(time_during_unknown)
 
                 else:
                     time_during_unknown += 0.1
@@ -113,7 +140,7 @@ while hasFrame:
                     
             else:
                 time_during_unknown += 0.1
-                name = "Unknown"
+               
         else:
             time_during_unknown += 0.1
 
@@ -126,7 +153,6 @@ while hasFrame:
             elapsed_time = time.time() - record_start_time
             cropped_face = frame[y1:y2, x1:x2]
             filename = f"faces/{new_name}_{time.strftime('%Y%m%d_%H%M%S')}.jpg"
-            print(f"Recording new face at: {filename}")
             
             success = cv2.imwrite(filename, cropped_face)
             if not success:
@@ -143,7 +169,6 @@ while hasFrame:
             else:
                 print(f"Failed to load image: {filename}")
 
-            print(f"Elapsed Time: {elapsed_time:.2f} seconds")
 
             if elapsed_time >= 5:
                 recording = False
