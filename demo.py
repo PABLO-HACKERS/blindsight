@@ -8,6 +8,7 @@ from blazeface import BlazeFace
 from blazebase import resize_pad, denormalize_detections
 from visualization import draw_detections
 
+import threading
 import sounddevice as sd
 import whisper
 import scipy.io.wavfile as wav
@@ -62,23 +63,26 @@ recording = False
 detect_faces = False
 detect_speech = True
 
-while hasFrame:
-    
-    if detect_speech:
-        #whisper
+def record_voice():
+    while True:
         audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
         sd.wait()
-
         wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
+        print("done recording")    
         
-        # Transcribe the audio chunk
+def transcribe_audio():
+    global detect_faces
+    while True:
         result = model.transcribe("temp_audio.wav")
         print("Transcription:", result["text"])
-        
         if "who are you" in result["text"].lower():
             detect_faces = True
-            detect_speech = False
-    
+            print("jepti")
+        
+threading.Thread(target=record_voice).start()
+threading.Thread(target=transcribe_audio).start()
+
+while hasFrame:    
     frame_count += 1
     
     if mirror_img:

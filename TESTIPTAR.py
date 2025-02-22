@@ -1,51 +1,26 @@
-import threading
 import sounddevice as sd
-import wave
 import numpy as np
 import whisper
+import scipy.io.wavfile as wav
+import cv2
 
-SAMPLE_RATE = 16000
-DURATION = 5
-FILENAME = "audio.wav"
+# Load Whisper model
+model = whisper.load_model("small.en")
 
-def record_audio():
-    """Records 5 seconds of audio and saves it as a WAV file."""
-    print("Recording for 5 seconds...")
-    audio_data = sd.rec(int(SAMPLE_RATE * DURATION), samplerate=SAMPLE_RATE, channels=1, dtype=np.int16)
-    sd.wait()  # Wait for recording to finish
+# Recording settings
+sample_rate = 16000  # Whisper expects 16kHz audio
+chunk_duration = 5  # Capture 5 seconds at a time
 
-    # Save to WAV file
-    with wave.open(FILENAME, 'wb') as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(SAMPLE_RATE)
-        wf.writeframes(audio_data.tobytes())
+while True:
+    print("Listening for speech...")
+    audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
+    sd.wait()  # Wait until recording finishes
 
-    print(f"Recording saved as {FILENAME}")
+    # Save to a temporary file
 
-def transcribe_audio():
-    """Waits for recording to finish and then transcribes the saved WAV file."""
-    print("Waiting for recording to finish...")
+    wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
+
     
-    # Wait for the recording to complete
-    recording_thread.join()
-
-    print("Transcribing...")
-    model = whisper.load_model("small")
-    result = model.transcribe(FILENAME)
-    
+    # Transcribe the audio chunk
+    result = model.transcribe("temp_audio.wav")
     print("Transcription:", result["text"])
-
-# Start recording thread first
-recording_thread = threading.Thread(target=record_audio)
-recording_thread.start()
-
-# Start transcription thread (will wait for recording_thread to finish)
-transcription_thread = threading.Thread(target=transcribe_audio)
-transcription_thread.start()
-
-# Wait for both threads to finish before exiting
-recording_thread.join()
-transcription_thread.join()
-
-print("Done.")
