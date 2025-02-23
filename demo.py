@@ -13,6 +13,13 @@ import sounddevice as sd
 import whisper
 import scipy.io.wavfile as wav
 
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import ollama
+import keyboard
+
+llama_model = "llama3.1:8b"
+
+
 os.makedirs('faces', exist_ok=True)
 
 # Setup Torch / BlazeFace
@@ -62,22 +69,44 @@ recording = False
 
 detect_faces = False
 detect_speech = True
+get_llama_response = False
+
+#LLAMA
 
 def record_voice():
     while True:
+        print("record start")
         audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
         sd.wait()
         wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
-        print("done recording")    
+        print("record end")
         
 def transcribe_audio():
     global detect_faces
+    global get_llama_response
     while True:
+        if not get_llama_response:
+            continue
+        get_llama_response = False
         result = model.transcribe("temp_audio.wav")
-        print("Transcription:", result["text"])
-        if "who are you" in result["text"].lower():
+        
+        
+        input_text = "You are an AI assistant for a blind person. The blind person just said the following: " + result["text"] + " . One of your features is to identify who the blind person is talking to. Is this user trying to identify another person with their command. Some example commands could be \"Who are you?\" or \"Who is this person?\". Please answer with only one word: either Yes or No"
+
+        response = ollama.chat(model=llama_model, messages=[
+            {
+                'role':'user',
+                'content': input_text
+            }
+        ])
+        output_text = response['message']['content']
+        print("=======================")
+        print(input_text)
+        print("=======================")
+        print(output_text)
+
+        if "yes" in output_text.lower():
             detect_faces = True
-            print("jepti")
         
 threading.Thread(target=record_voice).start()
 threading.Thread(target=transcribe_audio).start()
@@ -119,6 +148,7 @@ while hasFrame:
                 
         if time_during_unknown  >= unknown_time_threshold:
             can_record = True
+      
         
         if len(known_face_encodings) > 0:
             if len(encodings) > 0:
@@ -140,7 +170,7 @@ while hasFrame:
 
                 else:
                     time_during_unknown += 0.1
-                    name = "Unknown"                    
+                    name = "Unknown"         
                     
             else:
                 time_during_unknown += 0.1
