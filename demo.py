@@ -83,31 +83,36 @@ def record_voice():
         
 def transcribe_audio():
     global detect_faces
-    global get_llama_response
     while True:
-        if not get_llama_response:
-            continue
-        get_llama_response = False
         result = model.transcribe("temp_audio.wav")
         
-        
-        input_text = "You are an AI assistant for a blind person. The blind person just said the following: " + result["text"] + " . One of your features is to identify who the blind person is talking to. Is this user trying to identify another person with their command. Some example commands could be \"Who are you?\" or \"Who is this person?\". Please answer with only one word: either Yes or No"
+        with open("transcription.txt", "w") as file:
+            file.write(result["text"])
+            
+def get_llama():
+    global detect_faces
+    
+    with open("transcription.txt", "r") as file:
+        text = file.read()
+    
+    input_text = "You are an AI assistant for a blind person. The blind person just said the following: " + text + " . One of your features is to identify who the blind person is talking to. Is this user trying to identify another person with their command? Some example commands could be \"Who are you?\" or \"Who is this person?\". Please answer with only one word: either Yes or No"
 
-        response = ollama.chat(model=llama_model, messages=[
-            {
-                'role':'user',
-                'content': input_text
-            }
-        ])
-        output_text = response['message']['content']
-        print("=======================")
-        print(input_text)
-        print("=======================")
-        print(output_text)
+    response = ollama.chat(model=llama_model, messages=[
+        {
+            'role':'user',
+            'content': input_text
+        }
+    ])
+    output_text = response['message']['content']
+    print("=======================")
+    print(input_text)
+    print("=======================")
+    print(output_text)
 
-        if "yes" in output_text.lower():
-            detect_faces = True
-        
+    if "yes" in output_text.lower():
+        detect_faces = True
+    
+threading.Thread(target=get_llama).start()
 threading.Thread(target=record_voice).start()
 threading.Thread(target=transcribe_audio).start()
 
