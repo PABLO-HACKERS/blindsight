@@ -50,5 +50,7 @@
     " Who are you?": "face",
     " Who is in front of me?": "face",
     " Is it connected? Yeah. Who are you?": "face",
-    " Nicholas": "object"
+    " Nicholas": "object",
+    " Move it in front and B.": "face",
+    " Hello video editing presentation, holy": "face"
 }

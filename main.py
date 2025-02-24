@@ -23,25 +23,25 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QScrollArea, QLabel, QLineEdit, QPushButton, QSizePolicy
 )
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer, Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
 from interface import Ui_MainWindow  
 from Custom_Widgets import *
 
 pygame.mixer.init()
 
-# --- ChatBubble class for chat messages ---
 class ChatBubble(QLabel):
     def __init__(self, text, is_sender=False):
         super().__init__(text)
         self.setWordWrap(True)
         self.setMaximumWidth(250)
         self.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
-        # Different styles for sent and received messages
+        # Set different background colors for sender and receiver
         if is_sender:
             self.setStyleSheet("""
                 QLabel {
-                    background-color: #DCF8C6;
+                    background-color: #FFFFFF;
+                    color: #000000;
                     border-radius: 10px;
                     padding: 8px;
                 }
@@ -49,8 +49,8 @@ class ChatBubble(QLabel):
         else:
             self.setStyleSheet("""
                 QLabel {
-                    background-color: #FFFFFF;
-                    border: 1px solid #DDD;
+                    background-color: #FFA500;  /* Orange background */
+                    color: #000000;
                     border-radius: 10px;
                     padding: 8px;
                 }
@@ -109,12 +109,50 @@ class MainWindow(QMainWindow):
         self.create_new_name = False
         self.new_name = ""
         self.record_start_time = 0
+        
+        self.message_to_SR = ""
+        self.s_or_r = 0
 
         # Threading events
         self.recording_done_event = threading.Event()
         self.recording_done_event.clear()
         self.create_new_name_event = threading.Event()
         self.recording_new_name_event = threading.Event()
+        
+        self.ui.settingsBtn.clicked.connect(lambda:self.ui.centerMenuContainer.expandMenu())
+        self.ui.informationBtn.clicked.connect(lambda:self.ui.centerMenuContainer.expandMenu())
+        self.ui.helpBtn.clicked.connect(lambda:self.ui.centerMenuContainer.expandMenu())
+
+        self.ui.closeCenterMenuBtn.clicked.connect(lambda:self.ui.centerMenuContainer.collapseMenu())
+
+        self.ui.moreBtn.clicked.connect(lambda:self.ui.rightMenuContainer.expandMenu())
+        self.ui.profileBtn.clicked.connect(lambda:self.ui.rightMenuContainer.expandMenu())
+
+        self.ui.closeRightMenuBtn.clicked.connect(lambda:self.ui.rightMenuContainer.collapseMenu())
+        
+        # After self.ui.setupUi(self) and any style loading, etc.
+        # Hide or remove the existing label if it’s not needed:
+        self.ui.label_9.hide()
+
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+
+        # Get the existing layout, if any
+        layout = self.ui.page_2.layout()
+        if layout is None:
+            layout = QVBoxLayout(self.ui.page_2)
+            self.ui.page_2.setLayout(layout)
+            
+        # Now add your scroll area to the layout
+        layout.addWidget(self.scroll_area)
+
+        
+        
+        self.chat_container = QWidget()
+        self.chat_layout = QVBoxLayout(self.chat_container)
+        self.chat_layout.setAlignment(Qt.AlignTop)
+        self.chat_layout.setSpacing(10)
+        self.scroll_area.setWidget(self.chat_container)
 
         # --- Load previously stored faces ---
         image_files = [os.path.join("faces", f) for f in os.listdir("faces")]
@@ -143,26 +181,13 @@ class MainWindow(QMainWindow):
         threading.Thread(target=self.record_voice, daemon=True).start()
         threading.Thread(target=self.transcribe_audio, daemon=True).start()
 
-        # --- Integrate Chat Section ---
-        # Hide the placeholder widget (label_9) from the UI.
-        self.ui.label_9.hide()
-        # Create a new QScrollArea for the chat messages.
-        self.chat_scroll_area = QScrollArea(self)
-        # Position it using the geometry of label_9.
-        self.chat_scroll_area.setGeometry(self.ui.label_9.geometry())
-        self.chat_scroll_area.setWidgetResizable(True)
-        # Create a container widget and a vertical layout for the chat bubbles.
-        self.chat_container = QWidget()
-        self.chat_layout = QVBoxLayout(self.chat_container)
-        self.chat_layout.setAlignment(Qt.AlignTop)
-        self.chat_scroll_area.setWidget(self.chat_container)
-        self.chat_scroll_area.show()
-
         self.show()
 
     def add_chat_bubble(self, text, is_sender=False):
         """Add a chat bubble to the chat container."""
         bubble = ChatBubble(text, is_sender)
+        
+        # Create a horizontal layout to align bubble left or right
         bubble_layout = QHBoxLayout()
         if is_sender:
             bubble_layout.addStretch()
@@ -170,27 +195,31 @@ class MainWindow(QMainWindow):
         else:
             bubble_layout.addWidget(bubble)
             bubble_layout.addStretch()
+
         self.chat_layout.addLayout(bubble_layout)
         # Auto-scroll to the bottom
-        self.chat_scroll_area.verticalScrollBar().setValue(
-            self.chat_scroll_area.verticalScrollBar().maximum()
+        self.scroll_area.verticalScrollBar().setValue(
+            self.scroll_area.verticalScrollBar().maximum()
         )
 
-    def send_chat_message(self, message: str):
-        """Send a chat message given a string (right-aligned)."""
-        if message:
-            self.add_chat_bubble("You: " + message, is_sender=True)
+    def send_message(self, message):
+        """Handle sending a message."""
+        self.add_chat_bubble("You: " + message, is_sender=True)
 
-    def receive_chat_message(self, message: str):
-        """Receive a chat message given a string (left-aligned)."""
-        if message:
-            self.add_chat_bubble("Friend: " + message, is_sender=False)
+    def receive_message(self, message):
+        """Handle receiving a message (left-aligned)."""
+        self.add_chat_bubble("Pablo.AI: " + message, is_sender=False)
 
     def update_frame(self):
         ret, frame = self.capture.read()
         if not ret:
             print("Failed to capture frame")
             return
+        
+        if self.s_or_r != 0:
+            self.s_or_r = 0
+            self.send_message(self.message_to_SR)
+            self.message_to_SR = ""
 
         self.frame_count += 1
         if self.mirror_img:
@@ -226,6 +255,7 @@ class MainWindow(QMainWindow):
             encodings = []
             if self.frame_count % 100 == 0:
                 encodings = DeepFace.represent(face_crop_rgb, model_name="Facenet", enforce_detection=False)
+                
 
             if self.time_during_unknown >= self.unknown_time_threshold:
                 self.can_record = True
@@ -245,6 +275,7 @@ class MainWindow(QMainWindow):
                         self.recording = False
                         if not self.already_played_name and self.detect_faces:
                             asyncio.run(self.speak(f"{self.name} is in front of you"))
+                            self.receive_message(f"{self.name} is in front of you")
                             sound = pygame.mixer.Sound("output.wav")
                             sound.play()
                             pygame.time.delay(int(sound.get_length() * 1000))
@@ -260,6 +291,7 @@ class MainWindow(QMainWindow):
 
             if self.name == "Unknown" and not self.recording and self.can_record and self.detect_faces:
                 asyncio.run(self.speak("new person detected, what is their name?"))
+                self.receive_message("new person detected, what is their name?")
                 sound = pygame.mixer.Sound("output.wav")
                 sound.play()
                 pygame.time.delay(int(sound.get_length() * 1000 + 1000))
@@ -294,7 +326,6 @@ class MainWindow(QMainWindow):
             cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
             cv2.putText(frame, self.name, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
-        # --- Convert frame to QImage and update GUI label (label_10) ---
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         height, width, channels = frame_rgb.shape
         bytes_per_line = channels * width
@@ -302,6 +333,7 @@ class MainWindow(QMainWindow):
         self.ui.label_10.setPixmap(QPixmap.fromImage(q_img))
 
     def record_voice(self):
+
         while True:
             print("record start")
             audio = sd.rec(int(self.sample_rate * self.chunk_duration),
@@ -328,7 +360,9 @@ class MainWindow(QMainWindow):
                 extracted_name = self.llama_model.invoke(
                     input=f"Extract the valid English name from the following text: '{user_command}'. If there is a name, respond with just the name. If there is no name, respond with 'No'.")
                 if "No" not in extracted_name:
-                    print(f"new person saved under name: {extracted_name}")
+                    self.message_to_SR = extracted_name
+                    self.s_or_r = 1
+
                     self.create_new_name = False
                     self.new_name = extracted_name
                     self.create_new_name_event.set()
@@ -362,8 +396,13 @@ class MainWindow(QMainWindow):
                 print(output_text)
                 if "face" in output_text.lower():
                     self.detect_faces = True
+                    self.message_to_SR = user_command
+                    self.s_or_r = 1
                 elif "object" in output_text.lower():
                     self.detect_objects = True
+                    self.message_to_SR = user_command
+                    self.s_or_r = 1
+
             self.recording_done_event.clear()
 
     async def speak(self, text_to_say):
@@ -399,12 +438,11 @@ class MainWindow(QMainWindow):
             detected_objects.append(self.classes[class_ids[i]])
             color = (0, 255, 0)
             cv2.rectangle(image, (x, y), (x + w_box, y + h_box), color, 2)
-            if label == "person":
-                label = "stud"
             cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         cv2.imshow("YOLOv3 Detection", image)
         output_string = ", ".join(detected_objects)
-        asyncio.run(self.speak(output_string))
+        asyncio.run(self.speak(f"There is a {output_string} in front of you"))
+        self.receive_message(f"There is a {output_string} in front of you")
         sound = pygame.mixer.Sound("output.wav")
         sound.play()
         pygame.time.delay(int(sound.get_length() * 1000))
@@ -416,13 +454,5 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-   
     window = MainWindow()
-
-    # Example usage: call these methods from anywhere in your code.
-    # For instance, sending a message:
-    window.send_chat_message("Hello, how are you?")
-    # And receiving a message:
-    window.receive_chat_message("I'm doing well, thanks!")
-
     sys.exit(app.exec_())

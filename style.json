@@ -164,7 +164,9 @@
     "Buttons": [
       "homeBtn",
       "dataBtn",
-      "reportBtn"
+      "reportBtn",
+	  "moreBtn",
+	  "profileBtn"
     ],
     "Style": [
       {
