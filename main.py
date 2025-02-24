@@ -47,7 +47,6 @@ class MainWindow(QMainWindow):
         self.ui.profileBtn.clicked.connect(lambda:self.ui.rightMenuContainer.expandMenu())
 
         self.ui.closeRightMenuBtn.clicked.connect(lambda:self.ui.rightMenuContainer.collapseMenu())
-        
 
 
 
