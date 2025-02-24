@@ -40,7 +40,7 @@ known_face_encodings = []
 known_face_names = []
 can_record = False
 time_during_unknown = 0
-unknown_time_threshold = 20
+unknown_time_threshold = 30
 
 cv2.namedWindow("test")
 capture = cv2.VideoCapture(0)
@@ -84,6 +84,8 @@ recording_done_event.clear()
 
 create_new_name_event = threading.Event()
 
+recording_new_name_event = threading.Event()
+
 
 """FUNCTIONS FOR THREADING"""
 def record_voice():
@@ -91,13 +93,20 @@ def record_voice():
     global can_record_transcribe
     
     while True:
+        global create_new_name
+        
         print("record start")
         audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
         sd.wait()
-        wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
+        if create_new_name:
+            wav.write("name_audio.wav", sample_rate, np.int16(audio * 32767))
+            recording_new_name_event.set()
+        else:
+            wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
+            recording_done_event.set()
+
         print("record end")
         
-        recording_done_event.set()
         
 def transcribe_audio():
     
@@ -108,25 +117,28 @@ def transcribe_audio():
     while True:           
         
         recording_done_event.wait()
-        
-        print("transcribe start")
-        
-        result = model.transcribe("temp_audio.wav")
-        
-        user_command = result["text"]
-        print("transcribe end")
 
         if create_new_name:
-            is_valid_name = "yes" in llama_model.invoke(input=f"Does the following text look like a valid name? {user_command}. Respond with only one word: Yes or No").lower()
+            
+            recording_new_name_event.wait()
+            recording_new_name_event.clear()
+            
+            result = model.transcribe("name_audio.wav")
+            user_command = result["text"]
+
+            extracted_name = llama_model.invoke(input=f"Extract the valid English name from the following text: '{user_command}'. If there is a name, respond with just the name. If there is no name, respond with 'No'.")
         
-            if is_valid_name:
-                print(f"new person saved under name: {user_command}")
+            if "No" not in extracted_name:
+                print(f"new person saved under name: {extracted_name}")
                 create_new_name = False
-                new_name = user_command
+                new_name = extracted_name
                 create_new_name_event.set()
             else:
                 print("Invalid name")
         else:
+            result = model.transcribe("temp_audio.wav")
+            user_command = result["text"]
+
             input_text = (
                 f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
                 "Your task is to determine if they are specifically asking to identify another person. "
@@ -155,6 +167,10 @@ threading.Thread(target=record_voice).start()
 threading.Thread(target=transcribe_audio).start()
 
 while hasFrame:    
+
+    if name != "Unknown":
+        time_during_unknown = 0
+                
     frame_count += 1
     
     if mirror_img:
@@ -186,7 +202,7 @@ while hasFrame:
         face_crop_rgb = cv2.cvtColor(face_crop_bgr, cv2.COLOR_BGR2RGB)
         
         encodings = []
-        if frame_count % 100 == 0 and detect_faces:
+        if (frame_count % 100 == 0):
             encodings = DeepFace.represent(face_crop_rgb, model_name="Facenet", enforce_detection=False)
                 
         if time_during_unknown  >= unknown_time_threshold:
@@ -207,9 +223,8 @@ while hasFrame:
                 threshold = 0.7
                 if best_sim > threshold:
                     name = known_face_names[best_idx]
-                    time_during_unknown = 0
                     recording = False
-                    if not already_played_name:
+                    if not already_played_name and detect_faces:
                         asyncio.run(speak(f"{name} is in front of you"))
                         sound = pygame.mixer.Sound("output.wav")
                         sound.play()
@@ -231,7 +246,7 @@ while hasFrame:
             asyncio.run(speak(f"new person detected, what is their name?"))
             sound = pygame.mixer.Sound("output.wav")
             sound.play()
-            pygame.time.delay(int(sound.get_length() * 1000))    
+            pygame.time.delay(int(sound.get_length() * 1000 + 1000))    
             
             create_new_name = True
             create_new_name_event.wait()
