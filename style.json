@@ -146,31 +146,34 @@
 			]
 	
 		}],
-		"QPushButtonGroup":[
-			{
-			"Buttons":[
-				"settingsBtn",
-				"informationBtn",
-				"helpBtn"
-			],
-			"Style":[
-				{
-					"Active":"background-color: #2c313c;"
-				}
-			]
+		"QPushButtonGroup": [
+  {
+    "Buttons": [
+      "settingsBtn",
+      "informationBtn",
+      "helpBtn"
+    ],
+    "Style": [
+      {
+        "Active": "background-color: #FFB733;",
+        "Hover": "background-color: #FFCC80; border: 1px solid #FFA500;"
+      }
+    ]
+  },
+  {
+    "Buttons": [
+      "homeBtn",
+      "dataBtn",
+      "reportBtn"
+    ],
+    "Style": [
+      {
+        "Active": "background-color: #FFA500;",
+        "Hover": "background-color: #FFB733; border: 1px solid #FF8C00;"
+      }
+    ]
+  }
 
-		},{
-			"Buttons":[
-				"homeBtn",
-				"dataBtn",
-				"reportBtn"
-			],
-			"Style":[
-				{
-					"Active":"background-color: #1f232a;"
-				}
-			]
 
-		}
 	]
 }

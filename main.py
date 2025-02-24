@@ -416,6 +416,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+   
     window = MainWindow()
 
     # Example usage: call these methods from anywhere in your code.

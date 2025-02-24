@@ -22,13 +22,14 @@ class Ui_MainWindow(object):
 "    padding:0;\n"
 "    margin: 0;\n"
 "    color:#fff;\n"
+"\n"
 "}\n"
 "\n"
 "#centralwidget{\n"
-"    background-color:#1f232a;\n"
+"    background-color:#1F1F1F;\n"
 "}\n"
 "#leftMenuContainer{\n"
-"        background-color:#16191d;\n"
+"        background-color:#2A2827;\n"
 "\n"
 "}\n"
 "\n"
@@ -41,20 +42,17 @@ class Ui_MainWindow(object):
 "\n"
 "}\n"
 "#centerMenuSubContainer,#rightMenuSubContainer{\n"
-"    background-color:#2c313c;\n"
+"    background-color:#2C2C2C;\n"
 "}\n"
 "#frame_4,#frame_8{\n"
-"    background-color:#16191d;\n"
+"    background-color:#2A2827;\n"
 "border-radius: 10px;\n"
 "\n"
 "}\n"
 "#headerContainer,#footerContainer{\n"
-"    background-color:#2c313c;\n"
+"    background-color:#2C2C2C;\n"
 "\n"
-"}\n"
-"\n"
-"\n"
-"")
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setAutoFillBackground(False)
         self.centralwidget.setObjectName("centralwidget")
@@ -108,13 +106,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.homeBtn = QtWidgets.QPushButton(self.frame_2)
         font = QtGui.QFont()
+        font.setFamily("Exo2 VariableFont")
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
         self.homeBtn.setFont(font)
-        self.homeBtn.setStyleSheet("background-color:#1f232a;")
+        self.homeBtn.setStyleSheet("background-color:#FFA500;")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/icon/home.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/icons/icon/camera.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.homeBtn.setIcon(icon1)
         self.homeBtn.setIconSize(QtCore.QSize(24, 24))
         self.homeBtn.setObjectName("homeBtn")
@@ -125,7 +124,9 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.dataBtn.setFont(font)
-        self.dataBtn.setIcon(icon)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/icon/gitlab.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.dataBtn.setIcon(icon2)
         self.dataBtn.setIconSize(QtCore.QSize(24, 24))
         self.dataBtn.setObjectName("dataBtn")
         self.verticalLayout_3.addWidget(self.dataBtn)
@@ -135,9 +136,9 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.reportBtn.setFont(font)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/icon/printer.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.reportBtn.setIcon(icon2)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/icon/file.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.reportBtn.setIcon(icon3)
         self.reportBtn.setIconSize(QtCore.QSize(24, 24))
         self.reportBtn.setObjectName("reportBtn")
         self.verticalLayout_3.addWidget(self.reportBtn)
@@ -158,9 +159,9 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.settingsBtn.setFont(font)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/icons/icon/settings.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.settingsBtn.setIcon(icon3)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/icons/icon/settings.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.settingsBtn.setIcon(icon4)
         self.settingsBtn.setIconSize(QtCore.QSize(24, 24))
         self.settingsBtn.setObjectName("settingsBtn")
         self.verticalLayout_4.addWidget(self.settingsBtn)
@@ -170,9 +171,9 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.informationBtn.setFont(font)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/icons/icon/info.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.informationBtn.setIcon(icon4)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/icons/icon/info.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.informationBtn.setIcon(icon5)
         self.informationBtn.setIconSize(QtCore.QSize(24, 24))
         self.informationBtn.setObjectName("informationBtn")
         self.verticalLayout_4.addWidget(self.informationBtn)
@@ -182,9 +183,9 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.helpBtn.setFont(font)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/icon/help-circle.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.helpBtn.setIcon(icon5)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/icons/icon/help-circle.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.helpBtn.setIcon(icon6)
         self.helpBtn.setIconSize(QtCore.QSize(24, 24))
         self.helpBtn.setObjectName("helpBtn")
         self.verticalLayout_4.addWidget(self.helpBtn)
@@ -222,9 +223,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.label_2)
         self.closeCenterMenuBtn = QtWidgets.QPushButton(self.frame_4)
         self.closeCenterMenuBtn.setText("")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/icons/icon/x-circle.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.closeCenterMenuBtn.setIcon(icon6)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/icons/icon/x-circle.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.closeCenterMenuBtn.setIcon(icon7)
         self.closeCenterMenuBtn.setIconSize(QtCore.QSize(24, 24))
         self.closeCenterMenuBtn.setObjectName("closeCenterMenuBtn")
         self.horizontalLayout_3.addWidget(self.closeCenterMenuBtn, 0, QtCore.Qt.AlignRight)
@@ -331,18 +332,22 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.moreBtn = QtWidgets.QPushButton(self.frame_6)
-        self.moreBtn.setText("")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/icons/icon/more-horizontal.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.moreBtn.setIcon(icon7)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.moreBtn.setFont(font)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/icons/icon/message-square.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.moreBtn.setIcon(icon8)
         self.moreBtn.setIconSize(QtCore.QSize(24, 24))
         self.moreBtn.setObjectName("moreBtn")
         self.horizontalLayout_6.addWidget(self.moreBtn)
         self.profileBtn = QtWidgets.QPushButton(self.frame_6)
-        self.profileBtn.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/icons/icon/user.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.profileBtn.setIcon(icon8)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.profileBtn.setFont(font)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(":/icons/icon/user.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.profileBtn.setIcon(icon9)
         self.profileBtn.setIconSize(QtCore.QSize(24, 24))
         self.profileBtn.setObjectName("profileBtn")
         self.horizontalLayout_6.addWidget(self.profileBtn)
@@ -356,23 +361,23 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.minimizeBtn = QtWidgets.QPushButton(self.frame_7)
         self.minimizeBtn.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/icons/icon/minus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.minimizeBtn.setIcon(icon9)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap(":/icons/icon/minus.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.minimizeBtn.setIcon(icon10)
         self.minimizeBtn.setObjectName("minimizeBtn")
         self.horizontalLayout_4.addWidget(self.minimizeBtn)
         self.restoreBtn = QtWidgets.QPushButton(self.frame_7)
         self.restoreBtn.setText("")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap(":/icons/icon/square.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.restoreBtn.setIcon(icon10)
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap(":/icons/icon/square.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.restoreBtn.setIcon(icon11)
         self.restoreBtn.setObjectName("restoreBtn")
         self.horizontalLayout_4.addWidget(self.restoreBtn)
         self.closeBtn = QtWidgets.QPushButton(self.frame_7)
         self.closeBtn.setText("")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap(":/icons/icon/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.closeBtn.setIcon(icon11)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap(":/icons/icon/x.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.closeBtn.setIcon(icon12)
         self.closeBtn.setIconSize(QtCore.QSize(16, 16))
         self.closeBtn.setObjectName("closeBtn")
         self.horizontalLayout_4.addWidget(self.closeBtn)
@@ -477,7 +482,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.addWidget(self.label_7)
         self.closeRightMenuBtn = QtWidgets.QPushButton(self.frame_8)
         self.closeRightMenuBtn.setText("")
-        self.closeRightMenuBtn.setIcon(icon6)
+        self.closeRightMenuBtn.setIcon(icon7)
         self.closeRightMenuBtn.setIconSize(QtCore.QSize(24, 24))
         self.closeRightMenuBtn.setObjectName("closeRightMenuBtn")
         self.horizontalLayout_9.addWidget(self.closeRightMenuBtn, 0, QtCore.Qt.AlignRight)
@@ -531,6 +536,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.frame_9)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.label_15 = QtWidgets.QLabel(self.frame_9)
+        font = QtGui.QFont()
+        font.setFamily("Exo2 VariableFont")
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.horizontalLayout_12.addWidget(self.label_15)
         self.horizontalLayout_10.addWidget(self.frame_9)
@@ -558,11 +569,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.menuBtn.setToolTip(_translate("MainWindow", "Menu"))
         self.homeBtn.setToolTip(_translate("MainWindow", "Home"))
-        self.homeBtn.setText(_translate("MainWindow", "Home"))
+        self.homeBtn.setText(_translate("MainWindow", "Recording"))
         self.dataBtn.setToolTip(_translate("MainWindow", "Data Analysis"))
-        self.dataBtn.setText(_translate("MainWindow", "Data Analysis"))
+        self.dataBtn.setText(_translate("MainWindow", "About Us"))
         self.reportBtn.setToolTip(_translate("MainWindow", "View Reports"))
-        self.reportBtn.setText(_translate("MainWindow", "Reports"))
+        self.reportBtn.setText(_translate("MainWindow", "Previous Logs"))
         self.settingsBtn.setToolTip(_translate("MainWindow", "Go to Settings"))
         self.settingsBtn.setText(_translate("MainWindow", "Settings"))
         self.informationBtn.setToolTip(_translate("MainWindow", "Information About the App"))
@@ -576,7 +587,9 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Information"))
         self.label_6.setText(_translate("MainWindow", "BlindSight"))
         self.moreBtn.setToolTip(_translate("MainWindow", "More"))
+        self.moreBtn.setText(_translate("MainWindow", "Pablo Chat"))
         self.profileBtn.setToolTip(_translate("MainWindow", "profile"))
+        self.profileBtn.setText(_translate("MainWindow", "Profile"))
         self.minimizeBtn.setToolTip(_translate("MainWindow", "Minimize Window"))
         self.restoreBtn.setToolTip(_translate("MainWindow", "Restore Window"))
         self.closeBtn.setToolTip(_translate("MainWindow", "Close Window"))
