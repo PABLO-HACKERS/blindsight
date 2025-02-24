@@ -1,0 +1,176 @@
+{
+	"QMainWindow":[
+		{
+			"tittle": "BlindSight",
+			"icon": ":/images/logo.png",
+			"frameless": true,
+			"transluscentBg": true,
+			"sizeGrip": "sizeGrip",
+			"animationDuration": 1500,  
+			"navigation":[
+				{
+					"minimize":"minimizeBtn",
+					"close": "closeBtn",
+					
+					"restore":[
+						{	
+							"buttonName": "restoreBtn",
+							"normalIcon": "icon/square.svg",
+							"maximizedIcon": "icon/copy.svg"
+						}
+					],
+					"moveWindow": "headerContainer",
+					"tittleBar": "headerContainer"
+				}
+			]
+		}
+	],
+	"QCustomSlideMenu": [{
+		"name": "leftMenuContainer",
+		"defaultSize": [{
+			"width": 45,
+			"height": "parent"
+		}],
+		"collapsedSize": [{
+			"width": 45,
+			"height": "parent"
+		}],
+		"expandedSize": [{
+			"width": 150,
+			"height": "parent"
+		}],
+		"toggleButton": [{
+			"buttonName": "menuBtn",
+			"icons": [{
+				"whenMenuIsCollapsed": "icon/align-justify.svg",
+				"whenMenuIsExpanded": "icon/chevron-left.svg"
+			}]
+			
+			
+		}],
+		"menuTransitionAnimation": [{
+			"animationDuration": 150,
+			"animationEasingCurve": "Linear"
+			
+		}]
+	
+	},{
+		"name": "centerMenuContainer",
+		"defaultSize": [{
+			"width": 0,
+			"height": "parent"
+		}],
+		"collapsedSize": [{
+			"width": 0,
+			"height": "parent"
+		}],
+		"expandedSize": [{
+			"width": 200,
+			"height": "parent"
+		}],
+		"menuTransitionAnimation": [{
+			"animationDuration": 150,
+			"animationEasingCurve": "Linear"
+			
+		}]
+	
+	},{
+		"name": "rightMenuContainer",
+		"defaultSize": [{
+			"width": 0,
+			"height": "auto"
+		}],
+		"collapsedSize": [{
+			"width": 0,
+			"height": "auto"
+		}],
+		"expandedSize": [{
+			"width": 200,
+			"height": "auto"
+		}],
+		"menuTransitionAnimation": [{
+			"animationDuration": 150,
+			"animationEasingCurve": "Linear"
+			
+		}]
+	
+	}],"QCustomQStackedWidget":[
+		{
+			"name":"mainPages",
+			
+			"navigation":[
+				{
+				
+					"navigationButtons":[
+						{
+							"homeBtn": "page_3",
+							"dataBtn": "page_4",
+							"reportBtn": "page_5"
+
+						}
+					]
+				}
+			]
+	
+		},{
+			"name":"centerMenuPages",
+			
+			"navigation":[
+				{
+				
+					"navigationButtons":[
+						{
+							"settingsBtn": "page_7",
+							"informationBtn": "page_9",
+							"helpBtn": "page_8"
+
+						}
+					]
+				}
+			]
+	
+		},{
+			"name":"rightMenuPages",
+			
+			"navigation":[
+				{
+				
+					"navigationButtons":[
+						{
+							"profileBtn": "page",
+							"moreBtn": "page_2"
+
+						}
+					]
+				}
+			]
+	
+		}],
+		"QPushButtonGroup":[
+			{
+			"Buttons":[
+				"settingsBtn",
+				"informationBtn",
+				"helpBtn"
+			],
+			"Style":[
+				{
+					"Active":"background-color: #2c313c;"
+				}
+			]
+
+		},{
+			"Buttons":[
+				"homeBtn",
+				"dataBtn",
+				"reportBtn"
+			],
+			"Style":[
+				{
+					"Active":"background-color: #1f232a;"
+				}
+			]
+
+		}
+	]
+}
