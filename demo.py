@@ -15,9 +15,9 @@ import scipy.io.wavfile as wav
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import ollama
-import keyboard
+from langchain_ollama import OllamaLLM
 
-llama_model = "llama3.1:8b"
+llama_model = OllamaLLM(model="llama3.1:8b")
 
 
 os.makedirs('faces', exist_ok=True)
@@ -71,48 +71,56 @@ detect_faces = False
 detect_speech = True
 get_llama_response = False
 
+recording_done_event = threading.Event()
+recording_done_event.clear()
+
+
 #LLAMA
 
 def record_voice():
     while True:
+
+        
         print("record start")
         audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
         sd.wait()
         wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
         print("record end")
         
+        recording_done_event.set()
+        
 def transcribe_audio():
     global detect_faces
     while True:
+        
+        recording_done_event.wait()
+        
+        print("transcribe start")
+        
         result = model.transcribe("temp_audio.wav")
         
-        with open("transcription.txt", "w") as file:
-            file.write(result["text"])
+        user_command = result["text"]
+        print("transcribe end")
+
+        input_text = (
+            f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
+            "Your task is to determine if they are specifically asking to identify another person. "
+            "For example, questions like \"Who are you?\" or \"Who is this person?\" require identification. "
+            "However, if the user says something generic like \"you\" or addresses the AI, do not assume they mean identification. "
+            "Respond with only one word: Yes or No."
+        )
+
+
+        output_text = llama_model.invoke(input=input_text)
+        print("=======================")
+        print(input_text)
+        print("=======================")
+        print(output_text)
+
+        if "yes" in output_text.lower():
+            detect_faces = True
             
-def get_llama():
-    global detect_faces
     
-    with open("transcription.txt", "r") as file:
-        text = file.read()
-    
-    input_text = "You are an AI assistant for a blind person. The blind person just said the following: " + text + " . One of your features is to identify who the blind person is talking to. Is this user trying to identify another person with their command? Some example commands could be \"Who are you?\" or \"Who is this person?\". Please answer with only one word: either Yes or No"
-
-    response = ollama.chat(model=llama_model, messages=[
-        {
-            'role':'user',
-            'content': input_text
-        }
-    ])
-    output_text = response['message']['content']
-    print("=======================")
-    print(input_text)
-    print("=======================")
-    print(output_text)
-
-    if "yes" in output_text.lower():
-        detect_faces = True
-    
-threading.Thread(target=get_llama).start()
 threading.Thread(target=record_voice).start()
 threading.Thread(target=transcribe_audio).start()
 
