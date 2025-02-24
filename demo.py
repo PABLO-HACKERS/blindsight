@@ -17,10 +17,22 @@ from langchain_ollama import OllamaLLM
 import edge_tts
 import asyncio
 import pygame
+import json
 
 pygame.mixer.init()
 
-llama_model = OllamaLLM(model="llama3.1:8b")
+llama_model = OllamaLLM(model="llama3.1:8b", base_url="http://localhost:11434")
+
+CACHE_FILE = "cache.json"
+
+if os.path.exists(CACHE_FILE):
+    with open(CACHE_FILE, "r") as f:
+        try:
+            cache = json.load(f)
+        except json.JSONDecodeError:
+            cache = {}
+else:
+    cache = {}
 
 
 os.makedirs('faces', exist_ok=True)
@@ -64,14 +76,15 @@ else:
 
 model = whisper.load_model("small.en")
 
-sample_rate = 16000  # Whisper expects 16kHz audio
-chunk_duration = 5  # Capture 5 seconds at a time
+sample_rate = 16000
+chunk_duration = 5
 
 frame_count = 0
 recording = False
 
 detect_faces = False
 detect_speech = True
+detect_objects = False
 get_llama_response = False
 can_record_transcribe = True
 already_played_name = False
@@ -85,6 +98,17 @@ recording_done_event.clear()
 create_new_name_event = threading.Event()
 
 recording_new_name_event = threading.Event()
+
+"""
+YOLOV3 MODEL SETUP
+"""
+
+net = cv2.dnn.readNet("yolo/yolov3.weights", "yolo/yolov3.cfg")
+layer_names = net.getLayerNames()
+output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+
+with open("yolo/coco.names", "r") as f:
+    classes = [line.strip() for line in f.readlines()]
 
 
 """FUNCTIONS FOR THREADING"""
@@ -111,6 +135,7 @@ def record_voice():
 def transcribe_audio():
     
     global detect_faces
+    global detect_objects
     global create_new_name
     global new_name
     
@@ -124,8 +149,9 @@ def transcribe_audio():
             recording_new_name_event.clear()
             
             result = model.transcribe("name_audio.wav")
-            user_command = result["text"]
-
+            user_command = result["text"]            
+            
+                        
             extracted_name = llama_model.invoke(input=f"Extract the valid English name from the following text: '{user_command}'. If there is a name, respond with just the name. If there is no name, respond with 'No'.")
         
             if "No" not in extracted_name:
@@ -136,31 +162,96 @@ def transcribe_audio():
             else:
                 print("Invalid name")
         else:
+                       
             result = model.transcribe("temp_audio.wav")
             user_command = result["text"]
+            
+            
+            if len(user_command) < 5 or "thank you" in user_command.lower():
+                print("jepti")
+                continue
+            
+            output_text = ""
+            if user_command in cache:
+                output_text = cache[user_command]
+            else:
+                input_text = (
+                    f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
+                    "Your task is to determine if they are specifically asking for facial recognition or object identification. "
+                    "If the user asks about identifying a person, such as \"Who is this person?\" or \"Who am I talking to?\", respond with \"face\". "
+                    "If the user asks about objects in their surroundings, such as \"What is in front of me?\" or \"What am I holding?\", respond with \"object\". "
+                    "If the user request does not fall into these categories, respond with \"no\". "
+                    "Respond with only one word: face, object, or no."
+                )
 
-            input_text = (
-                f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
-                "Your task is to determine if they are specifically asking to identify another person. "
-                "For example, questions like \"Who are you?\" or \"Who is this person?\" require identification. "
-                "However, if the user says something generic like \"you\" or addresses the AI, do not assume they mean identification. "
-                "Respond with only one word: Yes or No."
-            )
-
-
-            output_text = llama_model.invoke(input=input_text)
-            print("=======================")
-            print(input_text)
-            print("=======================")
+                output_text = llama_model.invoke(input=input_text)
+                
+                cache[user_command] = output_text
+                if "no" not in output_text.lower():
+                    with open(CACHE_FILE, "w") as f:
+                        json.dump(cache, f, indent=4)
+                    
+                print("=======================")
+                print(input_text)
+                print("=======================")
             print(output_text)
 
-            if "yes" in output_text.lower():
+            if "face" in output_text.lower():
                 detect_faces = True
+            elif "object" in output_text.lower():
+                detect_objects = True
       
 """OTHER FUNCTIONS"""      
 async def speak(text_to_say):
     communicate = edge_tts.Communicate(text_to_say, "en-US-JennyNeural")
-    await communicate.save("output.wav")        
+    await communicate.save("output.wav")    
+    
+def run_object_detection():
+    image = cv2.imread("input.jpg")
+    height, width, _ = image.shape
+
+    blob = cv2.dnn.blobFromImage(image, 1/255.0, (416, 416), swapRB=True, crop=False)
+    net.setInput(blob)
+
+    outputs = net.forward(output_layers)
+
+    conf_threshold = 0.5
+    nms_threshold = 0.4
+    boxes, confidences, class_ids = [], [], []
+
+    for output in outputs:
+        for detection in output:
+            scores = detection[5:]
+            class_id = np.argmax(scores)
+            confidence = scores[class_id]
+            if confidence > conf_threshold:
+                center_x, center_y, w, h = (detection[:4] * np.array([width, height, width, height])).astype(int)
+                x, y = center_x - w // 2, center_y - h // 2
+                boxes.append([x, y, w, h])
+                confidences.append(float(confidence))
+                class_ids.append(class_id)
+
+    indices = cv2.dnn.NMSBoxes(boxes, confidences, conf_threshold, nms_threshold)
+
+    detected_objects = []
+    
+    for i in indices.flatten():
+        x, y, w, h = boxes[i]
+        label = f"{classes[class_ids[i]]}: {confidences[i]:.2f}"
+        detected_objects.append(classes[class_ids[i]])
+        color = (0, 255, 0)
+        cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
+        cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+    cv2.imshow("YOLOv3 Detection", image)
+    print(detected_objects)
+    output_string = ""
+    for text in detected_objects:
+        output_string += text + ", "
+    asyncio.run(speak(f"{output_string}"))
+    sound = pygame.mixer.Sound("output.wav")
+    sound.play()
+    pygame.time.delay(int(sound.get_length() * 1000))  
         
     
 threading.Thread(target=record_voice).start()
@@ -173,12 +264,17 @@ while hasFrame:
                 
     frame_count += 1
     
+    
+    
     if mirror_img:
         frame = np.ascontiguousarray(frame[:, ::-1, ::-1])
     else:
         frame = np.ascontiguousarray(frame[:, :, ::-1])
     
-    
+    if detect_objects:
+        detect_objects = False
+        cv2.imwrite("input.jpg", frame)
+        run_object_detection()
     
     img1, img2, scale, pad = resize_pad(frame)
 
