@@ -131,3 +131,4 @@ dmypy.json
 faces/
 *.jpg
 *.wav
+yolov3.weights

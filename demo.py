@@ -168,7 +168,7 @@ threading.Thread(target=transcribe_audio).start()
 
 while hasFrame:    
 
-    if name != "Unknown":
+    if name != "Unknown" or detect_faces == False:
         time_during_unknown = 0
                 
     frame_count += 1
