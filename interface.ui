@@ -21,13 +21,14 @@
 	padding:0;
 	margin: 0;
 	color:#fff;
+
 }
 
 #centralwidget{
-	background-color:#1f232a;
+	background-color:#1F1F1F;
 }
 #leftMenuContainer{
-		background-color:#16191d;
+		background-color:#2A2827;
 
 }
 
@@ -40,20 +41,17 @@
 
 }
 #centerMenuSubContainer,#rightMenuSubContainer{
-	background-color:#2c313c;
+	background-color:#2C2C2C;
 }
 #frame_4,#frame_8{
-	background-color:#16191d;
+	background-color:#2A2827;
 border-radius: 10px;
 
 }
 #headerContainer,#footerContainer{
-	background-color:#2c313c;
+	background-color:#2C2C2C;
 
-}
-
-
-</string>
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="autoFillBackground">
@@ -204,6 +202,7 @@ border-radius: 10px;
               <widget class="QPushButton" name="homeBtn">
                <property name="font">
                 <font>
+                 <family>Exo2 VariableFont</family>
                  <pointsize>10</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
@@ -213,14 +212,14 @@ border-radius: 10px;
                 <string>Home</string>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color:#1f232a;</string>
+                <string notr="true">background-color:#FFA500;</string>
                </property>
                <property name="text">
-                <string>Home</string>
+                <string>Recording</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icon/home.svg</normaloff>:/icons/icon/home.svg</iconset>
+                 <normaloff>:/icons/icon/camera.svg</normaloff>:/icons/icon/camera.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -243,11 +242,11 @@ border-radius: 10px;
                 <string>Data Analysis</string>
                </property>
                <property name="text">
-                <string>Data Analysis</string>
+                <string>About Us</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icon/align-justify.svg</normaloff>:/icons/icon/align-justify.svg</iconset>
+                 <normaloff>:/icons/icon/gitlab.svg</normaloff>:/icons/icon/gitlab.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -270,11 +269,11 @@ border-radius: 10px;
                 <string>View Reports</string>
                </property>
                <property name="text">
-                <string>Reports</string>
+                <string>Previous Logs</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icon/printer.svg</normaloff>:/icons/icon/printer.svg</iconset>
+                 <normaloff>:/icons/icon/file.svg</normaloff>:/icons/icon/file.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -704,15 +703,22 @@ border-radius: 10px;
              </property>
              <item>
               <widget class="QPushButton" name="moreBtn">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="toolTip">
                 <string>More</string>
                </property>
                <property name="text">
-                <string/>
+                <string>Pablo Chat</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icon/more-horizontal.svg</normaloff>:/icons/icon/more-horizontal.svg</iconset>
+                 <normaloff>:/icons/icon/message-square.svg</normaloff>:/icons/icon/message-square.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -724,11 +730,18 @@ border-radius: 10px;
              </item>
              <item>
               <widget class="QPushButton" name="profileBtn">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="toolTip">
                 <string>profile</string>
                </property>
                <property name="text">
-                <string/>
+                <string>Profile</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
@@ -1102,6 +1115,14 @@ border-radius: 10px;
             <layout class="QHBoxLayout" name="horizontalLayout_12">
              <item>
               <widget class="QLabel" name="label_15">
+               <property name="font">
+                <font>
+                 <family>Exo2 VariableFont</family>
+                 <pointsize>10</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>Copyright PabloHackers</string>
                </property>
