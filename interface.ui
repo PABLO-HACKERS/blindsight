@@ -79,7 +79,7 @@ border-radius: 10px;
      <widget class="QCustomSlideMenu" name="leftMenuContainer" native="true">
       <property name="maximumSize">
        <size>
-        <width>42</width>
+        <width>60</width>
         <height>16777215</height>
        </size>
       </property>
@@ -521,7 +521,7 @@ border-radius: 10px;
              </font>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_7">
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -848,7 +848,7 @@ border-radius: 10px;
                 </font>
                </property>
                <property name="currentIndex">
-                <number>2</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="page_3">
                 <layout class="QVBoxLayout" name="verticalLayout_16">

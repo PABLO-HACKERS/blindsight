@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.leftMenuContainer = QCustomSlideMenu(self.centralwidget)
-        self.leftMenuContainer.setMaximumSize(QtCore.QSize(42, 16777215))
+        self.leftMenuContainer.setMaximumSize(QtCore.QSize(60, 16777215))
         self.leftMenuContainer.setObjectName("leftMenuContainer")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.leftMenuContainer)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -548,8 +548,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.centerMenuPages.setCurrentIndex(2)
-        self.mainPages.setCurrentIndex(2)
+        self.centerMenuPages.setCurrentIndex(0)
+        self.mainPages.setCurrentIndex(0)
         self.rightMenuPages.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
