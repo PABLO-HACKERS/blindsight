@@ -13,9 +13,12 @@ import sounddevice as sd
 import whisper
 import scipy.io.wavfile as wav
 
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import ollama
 from langchain_ollama import OllamaLLM
+import edge_tts
+import asyncio
+import pygame
+
+pygame.mixer.init()
 
 llama_model = OllamaLLM(model="llama3.1:8b")
 
@@ -37,7 +40,7 @@ known_face_encodings = []
 known_face_names = []
 can_record = False
 time_during_unknown = 0
-unknown_time_threshold = 500
+unknown_time_threshold = 20
 
 cv2.namedWindow("test")
 capture = cv2.VideoCapture(0)
@@ -70,17 +73,24 @@ recording = False
 detect_faces = False
 detect_speech = True
 get_llama_response = False
+can_record_transcribe = True
+already_played_name = False
 
-recording_done_event = threading.Event()
+create_new_name = False
+new_name = ""
+
+recording_done_event = threading.Event() 
 recording_done_event.clear()
 
+create_new_name_event = threading.Event()
 
-#LLAMA
 
+"""FUNCTIONS FOR THREADING"""
 def record_voice():
+    
+    global can_record_transcribe
+    
     while True:
-
-        
         print("record start")
         audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
         sd.wait()
@@ -90,8 +100,12 @@ def record_voice():
         recording_done_event.set()
         
 def transcribe_audio():
+    
     global detect_faces
-    while True:
+    global create_new_name
+    global new_name
+    
+    while True:           
         
         recording_done_event.wait()
         
@@ -102,24 +116,40 @@ def transcribe_audio():
         user_command = result["text"]
         print("transcribe end")
 
-        input_text = (
-            f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
-            "Your task is to determine if they are specifically asking to identify another person. "
-            "For example, questions like \"Who are you?\" or \"Who is this person?\" require identification. "
-            "However, if the user says something generic like \"you\" or addresses the AI, do not assume they mean identification. "
-            "Respond with only one word: Yes or No."
-        )
+        if create_new_name:
+            is_valid_name = "yes" in llama_model.invoke(input=f"Does the following text look like a valid name? {user_command}. Respond with only one word: Yes or No").lower()
+        
+            if is_valid_name:
+                print(f"new person saved under name: {user_command}")
+                create_new_name = False
+                new_name = user_command
+                create_new_name_event.set()
+            else:
+                print("Invalid name")
+        else:
+            input_text = (
+                f"You are an AI assistant for a blind person. The user said: \"{user_command}\". "
+                "Your task is to determine if they are specifically asking to identify another person. "
+                "For example, questions like \"Who are you?\" or \"Who is this person?\" require identification. "
+                "However, if the user says something generic like \"you\" or addresses the AI, do not assume they mean identification. "
+                "Respond with only one word: Yes or No."
+            )
 
 
-        output_text = llama_model.invoke(input=input_text)
-        print("=======================")
-        print(input_text)
-        print("=======================")
-        print(output_text)
+            output_text = llama_model.invoke(input=input_text)
+            print("=======================")
+            print(input_text)
+            print("=======================")
+            print(output_text)
 
-        if "yes" in output_text.lower():
-            detect_faces = True
-            
+            if "yes" in output_text.lower():
+                detect_faces = True
+      
+"""OTHER FUNCTIONS"""      
+async def speak(text_to_say):
+    communicate = edge_tts.Communicate(text_to_say, "en-US-JennyNeural")
+    await communicate.save("output.wav")        
+        
     
 threading.Thread(target=record_voice).start()
 threading.Thread(target=transcribe_audio).start()
@@ -179,11 +209,16 @@ while hasFrame:
                     name = known_face_names[best_idx]
                     time_during_unknown = 0
                     recording = False
-
-
+                    if not already_played_name:
+                        asyncio.run(speak(f"{name} is in front of you"))
+                        sound = pygame.mixer.Sound("output.wav")
+                        sound.play()
+                        pygame.time.delay(int(sound.get_length() * 1000))              
+                        already_played_name = True
                 else:
                     time_during_unknown += 0.1
-                    name = "Unknown"         
+                    name = "Unknown"      
+                    already_played_name = False   
                     
             else:
                 time_during_unknown += 0.1
@@ -191,8 +226,16 @@ while hasFrame:
         else:
             time_during_unknown += 0.1
 
-        if name == "Unknown" and not recording and can_record:
-            new_name = input("Enter Name: ")
+        if name == "Unknown" and not recording and can_record and detect_faces:
+            
+            asyncio.run(speak(f"new person detected, what is their name?"))
+            sound = pygame.mixer.Sound("output.wav")
+            sound.play()
+            pygame.time.delay(int(sound.get_length() * 1000))    
+            
+            create_new_name = True
+            create_new_name_event.wait()
+            create_new_name_event.clear()
             record_start_time = time.time()
             recording = True
 

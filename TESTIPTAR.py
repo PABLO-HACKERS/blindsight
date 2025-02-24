@@ -1,26 +1,13 @@
-import sounddevice as sd
-import numpy as np
-import whisper
-import scipy.io.wavfile as wav
-import cv2
+import pygame
 
-# Load Whisper model
-model = whisper.load_model("small.en")
+# Initialize the pygame mixer
+pygame.mixer.init()
 
-# Recording settings
-sample_rate = 16000  # Whisper expects 16kHz audio
-chunk_duration = 5  # Capture 5 seconds at a time
+# Load the sound file
+sound = pygame.mixer.Sound("output.wav")
 
-while True:
-    print("Listening for speech...")
-    audio = sd.rec(int(sample_rate * chunk_duration), samplerate=sample_rate, channels=1, dtype="float32")
-    sd.wait()  # Wait until recording finishes
+# Play the sound
+sound.play()
 
-    # Save to a temporary file
-
-    wav.write("temp_audio.wav", sample_rate, np.int16(audio * 32767))
-
-    
-    # Transcribe the audio chunk
-    result = model.transcribe("temp_audio.wav")
-    print("Transcription:", result["text"])
+# Wait for the sound to finish before closing the program
+pygame.time.delay(int(sound.get_length() * 1000))  # Delay for the sound duration in milliseconds
