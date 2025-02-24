@@ -241,6 +241,8 @@ def run_object_detection():
         detected_objects.append(classes[class_ids[i]])
         color = (0, 255, 0)
         cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
+        if label == "person":
+            label = "stud"
         cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     cv2.imshow("YOLOv3 Detection", image)

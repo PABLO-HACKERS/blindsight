@@ -1,0 +1,179 @@
+2025-02-24 06:27:51,881 - DEBUG - Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+2025-02-24 06:27:52,589 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:27:52,589 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:27:52,589 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:27:52,589 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:27:55,559 - WARNING - From C:\Users\nicks\AppData\Local\Programs\Python\Python312\Lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-02-24 06:32:53,922 - DEBUG - Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+2025-02-24 06:32:54,574 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:32:54,574 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:32:54,574 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:32:54,574 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:32:56,977 - WARNING - From C:\Users\nicks\AppData\Local\Programs\Python\Python312\Lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-02-24 06:37:18,241 - DEBUG - Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+2025-02-24 06:37:18,884 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:37:18,885 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:37:18,885 - DEBUG - Creating converter from 7 to 5
+2025-02-24 06:37:18,885 - DEBUG - Creating converter from 5 to 7
+2025-02-24 06:37:21,203 - WARNING - From C:\Users\nicks\AppData\Local\Programs\Python\Python312\Lib\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-02-24 06:37:43,040 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:38:55,013 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:39:02,232 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 06:39:04,580 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000002723B14EA20>
+2025-02-24 06:39:04,580 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 06:39:04,582 - DEBUG - send_request_headers.complete
+2025-02-24 06:39:04,582 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 06:39:04,582 - DEBUG - send_request_body.complete
+2025-02-24 06:39:04,582 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 06:39:18,298 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 14:39:18 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 06:39:18,300 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 06:39:18,302 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 06:39:19,636 - DEBUG - receive_response_body.complete
+2025-02-24 06:39:19,637 - DEBUG - response_closed.started
+2025-02-24 06:39:19,637 - DEBUG - response_closed.complete
+2025-02-24 06:44:13,300 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:44:16,300 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 06:44:18,634 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001C501330C80>
+2025-02-24 06:44:18,635 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 06:44:18,636 - DEBUG - send_request_headers.complete
+2025-02-24 06:44:18,636 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 06:44:18,636 - DEBUG - send_request_body.complete
+2025-02-24 06:44:18,637 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 06:44:27,478 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 14:44:27 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 06:44:27,480 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 06:44:27,482 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 06:44:27,653 - DEBUG - receive_response_body.complete
+2025-02-24 06:44:27,653 - DEBUG - response_closed.started
+2025-02-24 06:44:27,654 - DEBUG - response_closed.complete
+2025-02-24 06:44:29,406 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:44:57,487 - DEBUG - close.started
+2025-02-24 06:44:57,488 - DEBUG - close.complete
+2025-02-24 06:44:57,488 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 06:44:59,524 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001C50145CC80>
+2025-02-24 06:44:59,524 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 06:44:59,525 - DEBUG - send_request_headers.complete
+2025-02-24 06:44:59,525 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 06:44:59,525 - DEBUG - send_request_body.complete
+2025-02-24 06:44:59,525 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 06:45:07,652 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 14:45:07 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 06:45:07,652 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 06:45:07,653 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 06:45:07,830 - DEBUG - receive_response_body.complete
+2025-02-24 06:45:07,830 - DEBUG - response_closed.started
+2025-02-24 06:45:07,830 - DEBUG - response_closed.complete
+2025-02-24 06:45:07,856 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:45:58,363 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:46:00,728 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 06:46:02,755 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000022939F16A20>
+2025-02-24 06:46:02,755 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 06:46:02,756 - DEBUG - send_request_headers.complete
+2025-02-24 06:46:02,756 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 06:46:02,757 - DEBUG - send_request_body.complete
+2025-02-24 06:46:02,757 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 06:46:11,231 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 14:46:11 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 06:46:11,233 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 06:46:11,234 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 06:46:11,414 - DEBUG - receive_response_body.complete
+2025-02-24 06:46:11,414 - DEBUG - response_closed.started
+2025-02-24 06:46:11,415 - DEBUG - response_closed.complete
+2025-02-24 06:46:11,433 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:48:54,656 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:49:04,822 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:53:35,501 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:53:38,698 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 06:53:40,752 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001FDBCDF9E20>
+2025-02-24 06:53:40,752 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 06:53:40,753 - DEBUG - send_request_headers.complete
+2025-02-24 06:53:40,753 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 06:53:40,754 - DEBUG - send_request_body.complete
+2025-02-24 06:53:40,754 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 06:53:53,667 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 14:53:53 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 06:53:53,668 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 06:53:53,670 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 06:53:54,825 - DEBUG - receive_response_body.complete
+2025-02-24 06:53:54,826 - DEBUG - response_closed.started
+2025-02-24 06:53:54,826 - DEBUG - response_closed.complete
+2025-02-24 06:53:54,839 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:55:31,902 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:55:44,158 - DEBUG - Using proactor: IocpProactor
+2025-02-24 06:56:54,297 - DEBUG - Creating converter from 3 to 5
+2025-02-24 06:57:05,626 - DEBUG - Using proactor: IocpProactor
+2025-02-24 07:01:01,004 - DEBUG - Creating converter from 3 to 5
+2025-02-24 07:01:12,621 - DEBUG - Using proactor: IocpProactor
+2025-02-24 07:01:23,147 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 07:01:25,165 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001AA97BAD460>
+2025-02-24 07:01:25,165 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 07:01:25,166 - DEBUG - send_request_headers.complete
+2025-02-24 07:01:25,166 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 07:01:25,166 - DEBUG - send_request_body.complete
+2025-02-24 07:01:25,166 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 07:01:30,425 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 15:01:30 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 07:01:30,428 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 07:01:30,429 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 07:01:31,364 - DEBUG - receive_response_body.complete
+2025-02-24 07:01:31,365 - DEBUG - response_closed.started
+2025-02-24 07:01:31,365 - DEBUG - response_closed.complete
+2025-02-24 07:01:38,944 - DEBUG - close.started
+2025-02-24 07:01:38,945 - DEBUG - close.complete
+2025-02-24 07:01:38,945 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 07:01:40,986 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001AA9085F6B0>
+2025-02-24 07:01:40,987 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 07:01:40,987 - DEBUG - send_request_headers.complete
+2025-02-24 07:01:40,987 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 07:01:40,987 - DEBUG - send_request_body.complete
+2025-02-24 07:01:40,987 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 07:01:42,739 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 15:01:42 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 07:01:42,740 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 07:01:42,741 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 07:01:43,084 - DEBUG - receive_response_body.complete
+2025-02-24 07:01:43,085 - DEBUG - response_closed.started
+2025-02-24 07:01:43,085 - DEBUG - response_closed.complete
+2025-02-24 07:31:27,859 - DEBUG - Creating converter from 3 to 5
+2025-02-24 07:32:08,257 - DEBUG - Using proactor: IocpProactor
+2025-02-24 07:32:13,816 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 07:32:16,126 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001DCA6102420>
+2025-02-24 07:32:16,126 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 07:32:16,127 - DEBUG - send_request_headers.complete
+2025-02-24 07:32:16,127 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 07:32:16,127 - DEBUG - send_request_body.complete
+2025-02-24 07:32:16,128 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 07:32:39,245 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 15:32:39 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 07:32:39,247 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 07:32:39,248 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 07:32:40,626 - DEBUG - receive_response_body.complete
+2025-02-24 07:32:40,627 - DEBUG - response_closed.started
+2025-02-24 07:32:40,627 - DEBUG - response_closed.complete
+2025-02-24 07:32:49,146 - DEBUG - close.started
+2025-02-24 07:32:49,146 - DEBUG - close.complete
+2025-02-24 07:32:49,147 - DEBUG - connect_tcp.started host='localhost' port=11434 local_address=None timeout=None socket_options=None
+2025-02-24 07:32:51,196 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001DCABBF6240>
+2025-02-24 07:32:51,196 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 07:32:51,197 - DEBUG - send_request_headers.complete
+2025-02-24 07:32:51,197 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 07:32:51,197 - DEBUG - send_request_body.complete
+2025-02-24 07:32:51,197 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 07:32:54,928 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 15:32:54 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 07:32:54,928 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 07:32:54,929 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 07:32:55,123 - DEBUG - receive_response_body.complete
+2025-02-24 07:32:55,123 - DEBUG - response_closed.started
+2025-02-24 07:32:55,124 - DEBUG - response_closed.complete
+2025-02-24 07:32:59,796 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-02-24 07:32:59,798 - DEBUG - send_request_headers.complete
+2025-02-24 07:32:59,798 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-02-24 07:32:59,800 - DEBUG - send_request_body.complete
+2025-02-24 07:32:59,801 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-02-24 07:33:03,252 - DEBUG - Using proactor: IocpProactor
+2025-02-24 07:33:12,682 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Mon, 24 Feb 2025 15:33:12 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-02-24 07:33:12,683 - INFO - HTTP Request: POST http://localhost:11434/api/generate "HTTP/1.1 200 OK"
+2025-02-24 07:33:12,683 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-02-24 07:33:12,689 - DEBUG - receive_response_body.complete
+2025-02-24 07:33:12,690 - DEBUG - response_closed.started
+2025-02-24 07:33:12,690 - DEBUG - response_closed.complete
+2025-02-24 07:33:14,453 - DEBUG - Using proactor: IocpProactor
+2025-02-24 07:33:18,647 - DEBUG - Using proactor: IocpProactor
+2025-02-24 09:44:20,347 - DEBUG - Creating converter from 3 to 5
+2025-02-24 10:21:29,490 - DEBUG - Creating converter from 3 to 5

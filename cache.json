@@ -44,5 +44,11 @@
     " Can you identify this object?": "object",
     "Describe what I am touching.": "object",
     " Describe what I am touching.": "object",
-    " Who am I looking at?": "face"
+    " Who am I looking at?": "face",
+    " Bro, what was in front of me?": "object",
+    " works": "face",
+    " Who are you?": "face",
+    " Who is in front of me?": "face",
+    " Is it connected? Yeah. Who are you?": "face",
+    " Nicholas": "object"
 }
