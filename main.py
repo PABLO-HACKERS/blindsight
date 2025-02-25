@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         loadJsonStyle(self, self.ui)
 
         # --- Setup Camera & Timer ---
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture(1)
         if not self.capture.isOpened():
             print("Error: Cannot open camera")
             sys.exit()
@@ -223,7 +223,7 @@ class MainWindow(QMainWindow):
 
         self.frame_count += 1
         if self.mirror_img:
-            frame = np.ascontiguousarray(frame[:, ::-1, ::-1])
+            frame = np.ascontiguousarray(frame[:, ::-1, :])
         else:
             frame = np.ascontiguousarray(frame[:, :, ::-1])
 
@@ -289,7 +289,7 @@ class MainWindow(QMainWindow):
             else:
                 self.time_during_unknown += 0.1
 
-            if self.name == "Unknown" and not self.recording and self.can_record and self.detect_faces:
+            if self.name == "Unknown" and self.detect_faces:
                 asyncio.run(self.speak("new person detected, what is their name?"))
                 self.receive_message("new person detected, what is their name?")
                 sound = pygame.mixer.Sound("output.wav")

@@ -52,5 +52,22 @@
     " Is it connected? Yeah. Who are you?": "face",
     " Nicholas": "object",
     " Move it in front and B.": "face",
-    " Hello video editing presentation, holy": "face"
+    " Hello video editing presentation, holy": "face",
+    " I had a bunch of how you coded": "object",
+    " Sweet Concerto in Wave. Mooi-u-eek.": "object",
+    " Who are you? Dude, stop that.": "face",
+    " Did you get it right back?": "object",
+    " Supposed to... See if she... Where does Faith print?": "face",
+    " New person detected.": "face",
+    " No, well, you need it kind of. Just make it quieter.": "object",
+    " Nick.": "face",
+    " Who's beaten those five? Who are you? Who are you?": "face",
+    " Thanks. Who are you?": "face",
+    " Right. New person detected.": "face",
+    " new person detected, what is their name? Nick!": "face",
+    " Is that a word? Nick.": "face",
+    " What are you holding?": "object",
+    " Okay.": "no",
+    " Alright.": "object",
+    " There's a person, cell phone in front of the room.": "object"
 }
